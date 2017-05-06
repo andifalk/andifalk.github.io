@@ -1,0 +1,380 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+		<title>Sicher in die Cloud</title>
+        <meta name="description" content="Sicher in die Cloud">
+        <meta name="author" content="Andreas Falk">
+
+        <link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/beige.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <link rel="stylesheet" href = "http://slidifylibraries2.googlecode.com/git/inst/libraries/widgets/bootstrap/css/bootstrap.css">
+
+
+        <!-- Printing and PDF exports -->
+		<script>
+			let link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+                <!-- Introduction -->
+
+				<section data-background="images/cloud.jpg">
+                    <h2>Sicher in die Cloud</h2>
+                    <h2>mit Angular und Spring Boot</h2>
+                    <img src="images/jax2017.png">
+                    <h3>9. Mai 2017</h3>
+                </section>
+				<section data-background="images/novatec-back.png">
+                    <div class='left' style='float:left;width:30%'>
+                        <img class="plain" src="images/profile.jpg" width="250px" height="300px" >
+                    </div>
+                    <div class='right' style='float:right;width:70%'>
+                        <h2>Andreas Falk</h2>
+                        <p>http://www.novatec-gmbh.de
+                        andreas.falk@novatec-gmbh.de</p>
+                        <p>Twitter: @andifalk</p>
+                    </div>
+                </section>
+                <section tagcloud>
+                    Agile
+                    Web
+                    Cloud
+                    OWASP
+                    OAuth2
+                    Spring
+                    Scrum
+                    Security
+                    TDD
+                    Java
+                    Java EE
+                    Microservices
+                    DDD
+                    Angular
+                    Typescript
+                    Code Review
+                    Threat Modeling
+                    Architektur
+                    BDD
+                    Clean Code
+                    SAML
+                    Static Analysis
+                    SSO
+                    DevOps
+                </section>
+                <section>
+                    <section>
+                        <h1>Architektur</h1>
+                        <h1>Threat Model</h1>
+                    </section>
+                    <section data-background="images/threat_architecture.png" data-background-size="90%">
+                        <aside class="notes">
+                            This slide has fragments which are also stepped through in the notes window.
+                        </aside>
+                    </section>
+                </section>
+
+                <!-- ANGULAR -->
+
+                <section>
+                    <section>
+                        <h1>Angular</h1>
+                        <img src="images/angular2-logo.png">
+                    </section>
+                    <section>
+                        <h2>AngularJS = Angular 1</h2>
+                        <h2>Angular = Angular 2.x, 4.x, 5.x, ...</h2>
+                        <img src="images/angular2-logo.png">
+                    </section>
+                    <section>
+                        <div class='left' style='float:left;width:40%'>
+                            <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
+                        </div>
+                        <div class='right' style='float:right;width:60%'>
+                            <h2>OWASP Top 10 2017</h2>
+                            <h3>A3: Cross-Site Scripting (XSS)</h3>
+                        </div>
+                    </section>
+                    <section>
+                        <h2>Angular JS Security</h2>
+                        <img src="images/angular1_tweet.png" width="1000px" height="250px">
+                        <small><a href="https://angularjs.blogspot.de/2016/09/angular-16-expression-sandbox-removal.html">
+                            https://angularjs.blogspot.de/2016/09/angular-16-expression-sandbox-removal.html</a></small>
+                    </section>
+                    <section>
+                        <h2>Angular Security</h2>
+                        <img src="images/security_tracking_issue.png">
+                        <small><a href="https://github.com/angular/angular/issues/8511">
+                            https://github.com/angular/angular/issues/8511</a></small>
+                    </section>
+                    <section>
+                        <h2>Angular Komponente</h2>
+                        <h4>Typescript</h4>
+                        <pre><code class="typescript" data-trim contenteditable>
+                            @Component({
+                                selector: 'app-root',
+                                templateUrl: 'app.component.html',
+                                styleUrls: ['app.component.css']
+                            })
+                            export class AppComponent {
+
+                                untrustedHtml:string =
+                                    '&lt;em&gt;&lt;script&gt;alert("hello")&lt;/script&gt;&lt;/em&gt;';
+
+                            }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Angular Template</h2>
+                        <h4>HTML Bindings</h4>
+                        <pre><code class="html" data-trim contenteditable>
+                            <h2>Binding potentiell gefährlicher HTML-Snippets</h2>
+
+                            <h3>Encoden von HTML Snippet</h3>
+                            <h3 class="trusted">{{untrustedHtml}}</h3>
+
+                            <h3>Sanitizing von HTML Snippet (mit 'innerHtml')</h3>
+                            <h3 class="trusted" [innerHTML]="untrustedHtml"></h3>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Double Submit CSRF Token</h2>
+                        <img src="images/csrf.jpg">
+                    </section>
+                    <section data-background="images/demo.jpg" data-background-size="100%">
+                        <h1>Demo</h1>
+                    </section>
+                </section>
+
+
+                <!-- Backend -->
+
+                <section>
+                    <section data-background="images/backend.png" data-background-size="80%">
+                        <h1>Backend</h1>
+                    </section>
+                    <section>
+                        <div class='left' style='float:left;width:40%'>
+                            <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
+                        </div>
+                        <div class='right' style='float:right;width:60%'>
+                            <h2>OWASP Top 10 2017</h2>
+                            <h3>A1: Injection</h3>
+                            <h3>A2: Broken Authentication and Session Management</h3>
+                            <h3>A8: Cross-Site Request Forgery</h3>
+                            <h3>A10: Underprotected APIs <span style="color: blue">(New)</span></h3>
+                        </div>
+                    </section>
+                    <section data-background="images/spring_stack.jpg" data-background-size="40%">
+                    </section>
+                </section>
+                <section>
+                    <section>
+                    <h1>Authentifizierung</h1>
+                    </section>
+                        <section>
+                            <h3>Stateful / Statelesss</h3>
+                            <table>
+                            <thead>
+                            <tr>
+                                <th>Session Cookie</th>
+                                <th>Token (Bearer, JWT)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Mit jedem Request</td>
+                                <td>Manuell als Header</td>
+                            </tr>
+                            <tr>
+                                <td>Gefahr von CSRF!</td>
+                                <td>Kein CSRF</td>
+                            </tr>
+                            <tr>
+                                <td>Persistiert bei Unload von DOM</td>
+                                <td>Keine automatische Persistenz</td>
+                            </tr>
+                            <tr>
+                                <td>Nur eine Domain</td>
+                                <td>Domainübergreifend (CORS)</td>
+                            </tr>
+                            <tr>
+                                <td>Sensitive Information (HTTPS)</td>
+                                <td>Sensitive Information (HTTPS)</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section>
+                        <h2>OAuth 2</h2>
+                        <img src="images/authserver.jpg">
+                    </section>
+                    <section>
+                        <h2>OpenID Connect</h2>
+                        <img src="images/identityserver.jpg">
+                    </section>
+                    <section>
+                        <h2>OAuth 2 Server als Tweet</h2>
+                        <img src="images/tweetable_oauth.png" width="90%" height="90%">
+                    </section>
+                    <section>
+                        <h1>Implicit</h1>
+                        <img src="images/angular2-logo.png" class="plain" width="20%">
+                        <img src="images/jquery.png" class="plain" width="20%">
+                    </section>
+                    <section>
+                        <h1>Client Credentials</h1>
+                        <img src="images/backend_communication.png">
+                    </section>
+                    <section>
+                        <h1>Resource Owner</h1>
+                        <h2>Möglichst vermeiden!</h2>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h1>Autorisierung</h1>
+                    </section>
+                    <section>
+                        <h2>Autorisierung der REST API</h2>
+                        <h3>Rollenbasiert</h3>
+                        <pre><code class="java" data-trim contenteditable>
+                            public class UserBoundaryService {
+
+                                @PreAuthorize("hasRole('ADMIN')")
+                                public List&lt;User&gt; findAllUsers() {...}
+
+                            }
+				    	</code></pre>
+                    </section>
+                    <section>
+                        <h2>Autorisierung der REST API</h2>
+                        <h3>Rechtebasiert</h3>
+                        <pre><code class="java" data-trim contenteditable>
+                            public class TaskBoundaryService {
+
+                                @PreAuthorize("hasPermission(#taskId, 'TASK', 'WRITE')")
+                                public Task findTask(UUID taskId) {...}
+
+                            }
+					    </code></pre>
+                    </section>
+                    <section>
+                        <h2>Autorisierung der REST API</h2>
+                        <h3>Integrationstest</h3>
+                        <pre><code class="java" data-trim contenteditable>
+                            public class AuthorizationIntegrationTest {
+
+                                @WithMockUser(roles = "ADMIN")
+                                @Test
+                                public void verifyFindAllUsersAuthorized() {...}
+
+                                @WithMockUser(roles = "USER")
+                                @Test(expected = AccessDeniedException.class)
+                                public void verifyFindAllUsersUnauthorized() {...}
+
+                            }
+					</code></pre>
+                    </section>
+                </section>
+                <section data-background="images/demo.jpg" data-background-size="100%">
+                    <h1>Demo</h1>
+                </section>
+                <section>
+                    <section data-background="images/cloud.jpg" data-background-size="100%">
+                        <h1>Und in der Cloud?</h1>
+                    </section>
+                    <section>
+                        <img src="images/cloud-modelle.png">
+                    </section>
+                    <section tagcloud>
+                        <h3>Alte Bekannte auch in der Cloud</h3>
+                        CSRF
+                        XSS
+                        SQL Injection
+                        Session Fixation
+                        Denial of Service
+                        Verwundbare Bibliotheken
+                        Schwache Passworte
+                        Broken Authorization
+                        Sensitive Data Exposure
+                    </section>
+                    <section>
+                        <h2>Rotate, Repair, Repave</h2>
+                        <blockquote cite="https://thenewstack.io/cloud-foundrys-approach-security-rotate-repair-repave">
+                            &ldquo;What if every server inside my data center had a maximum lifetime of two hours?
+                            This approach would frustrate malware writers...&rdquo;
+                        </blockquote>
+                        Justin Smith, Pivotal
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <div class='left' style='float:left;width:40%'>
+                            <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
+                        </div>
+                        <div class='right' style='float:right;width:60%'>
+                            <h2>A7: Insufficient Attack Protection</h2>
+                        </div>
+                    </section>
+                    <section data-background="images/attacks.png" data-background-size="100%">
+
+                    </section>
+                </section>
+                <section data-background="images/key.jpg">
+                    <h3>http://www.novatec-gmbh.de</br>
+                    http://blog.novatec-gmbh.de</h3>
+                    <p>andreas.falk@novatec-gmbh.de</p>
+                    <img src="images/twitter.png" width="50px" class="plain">
+                    <h4>@NT_AQE, @andifalk</h4>
+
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+
+		<script>
+			Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                slideNumber: 'c',
+
+                allottedTime: 5 * 60 * 1000, // 5 minutes
+
+                transition: 'none', // none/fade/slide/convex/concave/zoom
+				dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/print-pdf/print-pdf.js' },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/tagcloud/tagcloud.js', async: true },
+                    { src: 'plugin/elapsed-time-bar/elapsed-time-bar.js'},
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() {
+					    hljs.initHighlightingOnLoad(); }
+					}
+				]
+			});
+		</script>
+	</body>
+</html>
