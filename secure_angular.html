@@ -51,30 +51,44 @@
                     </div>
                 </section>
                 <section tagcloud>
-                    Agile
-                    Web
-                    Cloud
+                    SQLInjection
+                    CSRF
+                    XSS
                     OWASP
                     OAuth2
-                    Spring
-                    Scrum
-                    Security
-                    TDD
-                    Java
-                    Java EE
-                    Microservices
-                    DDD
-                    Angular
-                    Typescript
-                    Code Review
-                    Threat Modeling
-                    Architektur
-                    BDD
-                    Clean Code
-                    SAML
-                    Static Analysis
+                    AbUser-Stories
+                    Authentication
+                    Authorization
+                    Secure Coding
+                    Security-Testing
                     SSO
-                    DevOps
+                    Crypto
+                    Code-Reviews
+                    Threat-Modeling
+                    Architecture
+                    Dependencies
+                    DAST
+                    SAML
+                    SAST
+                    SSO
+                    DevSecOps
+                </section>
+                <section>
+                    <img src="images/owasp_top_10_2017.png" class="plain" width="45%" height="45%">
+                    <h3><a href="https://github.com/OWASP/Top10">https://github.com/OWASP/Top10</a></h3>
+                </section>
+                <section>
+                    <div class='left' style='float:left;width:50%'>
+                        <h4>App Security Verification Standard</h4>
+                        <img src="images/owasp_asvs_levels.png" class="plain" width="80%" height="80%">
+                        <small><a href="https://github.com/OWASP/ASVS">https://github.com/OWASP/ASVS</a></small>
+                    </div>
+                    <div class='right' style='float:right;width:50%'>
+                        <h4>Pro Active Controls</h4>
+                        <img src="images/owasp_pro_active_controls.png" class="plain" width="100%" height="100%">
+                        <small><a href="https://www.owasp.org/index.php/OWASP_Proactive_Controls">https://www.owasp.org/index.php/
+                            OWASP_Proactive_Controls</a></small>
+                    </div>
                 </section>
                 <section>
                     <section>
@@ -117,9 +131,23 @@
                     </section>
                     <section>
                         <h2>Angular Security</h2>
-                        <img src="images/security_tracking_issue.png">
+                        <blockquote cite="https://thenewstack.io/cloud-foundrys-approach-security-rotate-repair-repave">
+                            &ldquo;...The basic idea is to implement automatic, secure escaping for all values that can reach
+                            the DOM...
+                            By default, with no specific action for developers, Angular apps must be secure...&rdquo;
+                        </blockquote>
                         <small><a href="https://github.com/angular/angular/issues/8511">
                             https://github.com/angular/angular/issues/8511</a></small>
+                        <aside class="notes">
+                            Angular version aktuell halten. Security-Updates.
+                            Keine Änderungen am Angular Framework Code.
+                            Keine als Sicherheitsrisiko markierte Angular APIs verwenden
+                        </aside>
+                    </section>
+                    <section>
+                        <h1>Angular XSS Schutz</h1>
+                        <h3>Angular Template = <span style="color: green">Ausführbarer Code</span></h3>
+                        <h3>Eingabewerte = <span style="color: red">Als unsicher eingestuft</span></h3>
                     </section>
                     <section>
                         <h2>Angular Komponente</h2>
@@ -152,8 +180,13 @@
                         </code></pre>
                     </section>
                     <section>
-                        <h2>Double Submit CSRF Token</h2>
-                        <img src="images/csrf.jpg">
+                        <h2>Unsichere Angular API's</h2>
+                        <img src="images/angular_bypass_security.png" width="40%" height="40%">
+                        <p><b>ElementRef:</b> Direkter Zugriff auf den DOM</p>
+                        <p><b>DomSanitizer:</b> Deaktivieren des XSS-Schutzes</p>
+                        <p class="fragment grow highlight-current-red">Möglichst nicht verwenden!</p>
+                        <small><a href="https://angular.io/docs/ts/latest">
+                            https://angular.io/docs/ts/latest</a></small>
                     </section>
                     <section data-background="images/demo.jpg" data-background-size="100%">
                         <h1>Demo</h1>
@@ -183,12 +216,62 @@
                     </section>
                 </section>
                 <section>
+                    <h3>A1: Injection</h3>
+                    <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
+                </section>
+                <section>
+                    <h2>Spring Data JPA</h2>
+                    <h4>Prepared Statements</h4>
+                    <pre><code class="java" data-trim contenteditable>
+                            @Query(
+                            "select u from User u where u.username = "
+                            + " :username and u.password = :password")
+                            User findByUsernameAndPassword(
+                                 @Param("username") String username,
+                                 @Param("password") String password);
+				    	</code></pre>
+                </section>
+                <section>
                     <section>
-                    <h1>Authentifizierung</h1>
+                        <h3>A8: Cross-Site Request Forgery (CSRF)</h3>
+                        <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
                     </section>
-                        <section>
-                            <h3>Stateful / Statelesss</h3>
-                            <table>
+                    <section>
+                        <h2>Double Submit CSRF Token</h2>
+                        <img src="images/csrf.jpg">
+                    </section>
+                    <section>
+                        <h2>Spring Security CSRF Konfiguration</h2>
+                        <pre><code class="java" data-trim contenteditable>
+                            @Configuration
+                            public class WebSecurityConfiguration
+                                extends WebSecurityConfigurerAdapter {
+
+                                @Override
+                                protected void configure(HttpSecurity http)
+                                    throws Exception {
+                                    …
+                                    http
+                                       .csrf().csrfTokenRepository(
+                                          CookieCsrfTokenRepository.withHttpOnlyFalse()
+                                       );
+                            }
+				    	</code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h1>Wer bin ich?</h1>
+                        <ul>
+                            <li>A2: Broken Authentication and Session Management</li>
+                            <li>A10: Underprotected APIs</li>
+                        </ul>
+                        </p>
+                        <img src="images/owasp_top_10_2017.png" width="20%" height="20%">
+                    </section>
+                    <section>
+                        <h3>Stateful / Statelesss</h3>
+                        <table>
                             <thead>
                             <tr>
                                 <th>Session Cookie</th>
@@ -247,7 +330,13 @@
                 </section>
                 <section>
                     <section>
-                        <h1>Autorisierung</h1>
+                        <h1>Was darf ich?</h1>
+                        <ul>
+                            <li>A4: Broken Access Control</li>
+                            <li>A10: Underprotected APIs</li>
+                        </ul>
+                        </p>
+                        <img src="images/owasp_top_10_2017.png" width="20%" height="20%">
                     </section>
                     <section>
                         <h2>Autorisierung der REST API</h2>
@@ -298,9 +387,6 @@
                     <section data-background="images/cloud.jpg" data-background-size="100%">
                         <h1>Und in der Cloud?</h1>
                     </section>
-                    <section>
-                        <img src="images/cloud-modelle.png">
-                    </section>
                     <section tagcloud>
                         <h3>Alte Bekannte auch in der Cloud</h3>
                         CSRF
@@ -308,10 +394,17 @@
                         SQL Injection
                         Session Fixation
                         Denial of Service
-                        Verwundbare Bibliotheken
-                        Schwache Passworte
+                        Vulnerable Dependencies
+                        Weak Passwords
                         Broken Authorization
                         Sensitive Data Exposure
+                    </section>
+                    <section>
+                        <h2>Schwache Passwörter</h2>
+                        <img src="images/azure_management_console.png">
+                    </section>
+                    <section>
+                        <img src="images/cloud-modelle.png">
                     </section>
                     <section>
                         <h2>Rotate, Repair, Repave</h2>
@@ -324,6 +417,9 @@
                 </section>
                 <section>
                     <section>
+                        <h1>One more thing...</h1>
+                    </section>
+                    <section>
                         <div class='left' style='float:left;width:40%'>
                             <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
                         </div>
@@ -332,15 +428,14 @@
                         </div>
                     </section>
                     <section data-background="images/attacks.png" data-background-size="100%">
-
                     </section>
                 </section>
                 <section data-background="images/key.jpg">
-                    <h3>http://www.novatec-gmbh.de</br>
-                    http://blog.novatec-gmbh.de</h3>
+                    <p>http://www.novatec-gmbh.de</br>
+                    http://blog.novatec-gmbh.de</p>
                     <p>andreas.falk@novatec-gmbh.de</p>
                     <img src="images/twitter.png" width="50px" class="plain">
-                    <h4>@NT_AQE, @andifalk</h4>
+                    <p>@NT_AQE, @andifalk</p>
 
                 </section>
 			</div>
