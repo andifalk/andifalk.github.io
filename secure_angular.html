@@ -20,7 +20,7 @@
 
         <!-- Printing and PDF exports -->
 		<script>
-			let link = document.createElement( 'link' );
+			var link = document.createElement( 'link' );
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
@@ -214,24 +214,22 @@
                     </section>
                     <section data-background="images/spring_stack.jpg" data-background-size="40%">
                     </section>
-                </section>
-                <section>
-                    <h3>A1: Injection</h3>
-                    <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
-                </section>
-                <section>
-                    <h2>Spring Data JPA</h2>
-                    <h4>Prepared Statements</h4>
-                    <pre><code class="java" data-trim contenteditable>
-                            @Query(
-                            "select u from User u where u.username = "
-                            + " :username and u.password = :password")
-                            User findByUsernameAndPassword(
-                                 @Param("username") String username,
-                                 @Param("password") String password);
-				    	</code></pre>
-                </section>
-                <section>
+                    <section>
+                        <h3>A1: Injection</h3>
+                        <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
+                    </section>
+                    <section>
+                        <h2>Spring Data JPA</h2>
+                        <h4>Prepared Statements</h4>
+                        <pre><code class="java" data-trim contenteditable>
+                                @Query(
+                                "select u from User u where u.username = "
+                                + " :username and u.password = :password")
+                                User findByUsernameAndPassword(
+                                     @Param("username") String username,
+                                     @Param("password") String password);
+                            </code></pre>
+                    </section>
                     <section>
                         <h3>A8: Cross-Site Request Forgery (CSRF)</h3>
                         <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
@@ -256,10 +254,8 @@
                                           CookieCsrfTokenRepository.withHttpOnlyFalse()
                                        );
                             }
-				    	</code></pre>
+                        </code></pre>
                     </section>
-                </section>
-                <section>
                     <section>
                         <h1>Wer bin ich?</h1>
                         <ul>
@@ -327,8 +323,6 @@
                         <h1>Resource Owner</h1>
                         <h2>Möglichst vermeiden!</h2>
                     </section>
-                </section>
-                <section>
                     <section>
                         <h1>Was darf ich?</h1>
                         <ul>
@@ -379,9 +373,9 @@
                             }
 					</code></pre>
                     </section>
-                </section>
-                <section data-background="images/demo.jpg" data-background-size="100%">
-                    <h1>Demo</h1>
+                    <section data-background="images/demo.jpg" data-background-size="100%">
+                        <h1>Demo</h1>
+                    </section>
                 </section>
                 <section>
                     <section data-background="images/cloud.jpg" data-background-size="100%">
