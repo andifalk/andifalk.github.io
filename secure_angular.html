@@ -43,51 +43,11 @@
                     <div class='left' style='float:left;width:30%'>
                         <img class="plain" src="images/profile.jpg" width="250px" height="300px" >
                     </div>
-                    <div class='right' style='float:right;width:70%'>
-                        <h2>Andreas Falk</h2>
+                    <div class='right' style='float:right;width:70%; color: white'>
+                        <h2 style="color: white">Andreas Falk</h2>
                         <p>http://www.novatec-gmbh.de
                         andreas.falk@novatec-gmbh.de</p>
                         <p>Twitter: @andifalk</p>
-                    </div>
-                </section>
-                <section tagcloud>
-                    SQLInjection
-                    CSRF
-                    XSS
-                    OWASP
-                    OAuth2
-                    AbUser-Stories
-                    Authentication
-                    Authorization
-                    Secure Coding
-                    Security-Testing
-                    SSO
-                    Crypto
-                    Code-Reviews
-                    Threat-Modeling
-                    Architecture
-                    Dependencies
-                    DAST
-                    SAML
-                    SAST
-                    SSO
-                    DevSecOps
-                </section>
-                <section>
-                    <img src="images/owasp_top_10_2017.png" class="plain" width="45%" height="45%">
-                    <h3><a href="https://github.com/OWASP/Top10">https://github.com/OWASP/Top10</a></h3>
-                </section>
-                <section>
-                    <div class='left' style='float:left;width:50%'>
-                        <h4>App Security Verification Standard</h4>
-                        <img src="images/owasp_asvs_levels.png" class="plain" width="80%" height="80%">
-                        <small><a href="https://github.com/OWASP/ASVS">https://github.com/OWASP/ASVS</a></small>
-                    </div>
-                    <div class='right' style='float:right;width:50%'>
-                        <h4>Pro Active Controls</h4>
-                        <img src="images/owasp_pro_active_controls.png" class="plain" width="100%" height="100%">
-                        <small><a href="https://www.owasp.org/index.php/OWASP_Proactive_Controls">https://www.owasp.org/index.php/
-                            OWASP_Proactive_Controls</a></small>
                     </div>
                 </section>
                 <section>
@@ -99,6 +59,61 @@
                         <aside class="notes">
                             This slide has fragments which are also stepped through in the notes window.
                         </aside>
+                    </section>
+                    <section tagcloud>
+                        SQLInjection
+                        CSRF
+                        XSS
+                        OWASP
+                        OAuth2
+                        OpenID-Connect
+                        AbUser-Stories
+                        Authentication
+                        Authorization
+                        Secure Coding
+                        Security-Testing
+                        SSO
+                        DoS
+                        Sensitive-Data
+                        Data-Privacy
+                        Crypto
+                        Code-Reviews
+                        Threat-Modeling
+                        Architecture
+                        Dependencies
+                        DAST
+                        SAML
+                        SAST
+                        DevSecOps
+                    </section>
+                    <section tagcloud>
+                        SQLInjection
+                        CSRF
+                        XSS
+                        OWASP
+                        OAuth2
+                        OpenID-Connect
+                        Authentication
+                        Authorization
+                        Secure Coding
+                        Security-Testing
+                    </section>
+                    <section>
+                        <img src="images/owasp_top_10_2017.png" class="plain" width="45%" height="45%">
+                        <h3><a href="https://github.com/OWASP/Top10">https://github.com/OWASP/Top10</a></h3>
+                    </section>
+                    <section>
+                        <div class='left' style='float:left;width:50%'>
+                            <h4>App Security Verification Standard</h4>
+                            <img src="images/owasp_asvs_levels.png" class="plain" width="80%" height="80%">
+                            <small><a href="https://github.com/OWASP/ASVS">https://github.com/OWASP/ASVS</a></small>
+                        </div>
+                        <div class='right' style='float:right;width:50%'>
+                            <h4>Pro Active Controls</h4>
+                            <img src="images/owasp_pro_active_controls.png" class="plain" width="100%" height="100%">
+                            <small><a href="https://www.owasp.org/index.php/OWASP_Proactive_Controls">https://www.owasp.org/index.php/
+                                OWASP_Proactive_Controls</a></small>
+                        </div>
                     </section>
                 </section>
 
@@ -115,13 +130,8 @@
                         <img src="images/angular2-logo.png">
                     </section>
                     <section>
-                        <div class='left' style='float:left;width:40%'>
-                            <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
-                        </div>
-                        <div class='right' style='float:right;width:60%'>
-                            <h2>OWASP Top 10 2017</h2>
-                            <h3>A3: Cross-Site Scripting (XSS)</h3>
-                        </div>
+                        <h3>A3: Cross-Site Scripting (XSS)</h3>
+                        <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
                     </section>
                     <section>
                         <h2>Angular JS Security</h2>
@@ -146,8 +156,8 @@
                     </section>
                     <section>
                         <h1>Angular XSS Schutz</h1>
-                        <h3>Angular Template = <span style="color: green">Ausführbarer Code</span></h3>
-                        <h3>Eingabewerte = <span style="color: red">Als unsicher eingestuft</span></h3>
+                        <h3>Angular Template = <span style="color: green">Sicher</span></h3>
+                        <h3>Eingabewerte = <span style="color: red">Unsicher</span></h3>
                     </section>
                     <section>
                         <h2>Angular Komponente</h2>
@@ -197,38 +207,43 @@
                 <!-- Backend -->
 
                 <section>
-                    <section data-background="images/backend.png" data-background-size="80%">
-                        <h1>Backend</h1>
-                    </section>
                     <section>
-                        <div class='left' style='float:left;width:40%'>
-                            <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
-                        </div>
-                        <div class='right' style='float:right;width:60%'>
-                            <h2>OWASP Top 10 2017</h2>
-                            <h3>A1: Injection</h3>
-                            <h3>A2: Broken Authentication and Session Management</h3>
-                            <h3>A8: Cross-Site Request Forgery</h3>
-                            <h3>A10: Underprotected APIs <span style="color: blue">(New)</span></h3>
-                        </div>
-                    </section>
-                    <section data-background="images/spring_stack.jpg" data-background-size="40%">
+                        <h1>Backend</h1>
+                        <img src="images/spring_stack.jpg" width="40%" height="40%">
                     </section>
                     <section>
                         <h3>A1: Injection</h3>
                         <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
                     </section>
                     <section>
-                        <h2>Spring Data JPA</h2>
-                        <h4>Prepared Statements</h4>
+                        <h2>Spring MVC + Spring Data JPA</h2>
+                        <h4>Keine Injection mit Bean Validation</h4>
                         <pre><code class="java" data-trim contenteditable>
-                                @Query(
-                                "select u from User u where u.username = "
-                                + " :username and u.password = :password")
-                                User findByUsernameAndPassword(
-                                     @Param("username") String username,
-                                     @Param("password") String password);
-                            </code></pre>
+                            @Entity
+                            public class Person extends AbstractPersistable&lt;Long&gt; {
+
+                               @NotNull
+                               @Pattern(regexp = "^[A-Za-z0-9- ]{1,30}$")
+                               private String lastName;
+
+                               @NotNull
+                               @Enumerated(EnumType.STRING)
+                               private GenderEnum gender;
+                               ...
+                            }
+                         </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Data JPA</h2>
+                        <h4>Keine SQL-Injection mit Prepared Statements</h4>
+                        <pre><code class="java" data-trim contenteditable>
+                            @Query(
+                            "select u from User u where u.username = "
+                            + " :username and u.password = :password")
+                            User findByUsernameAndPassword(
+                                 @Param("username") String username,
+                                 @Param("password") String password);
+                        </code></pre>
                     </section>
                     <section>
                         <h3>A8: Cross-Site Request Forgery (CSRF)</h3>
@@ -258,15 +273,12 @@
                     </section>
                     <section>
                         <h1>Wer bin ich?</h1>
-                        <ul>
-                            <li>A2: Broken Authentication and Session Management</li>
-                            <li>A10: Underprotected APIs</li>
-                        </ul>
-                        </p>
+                        <h4>A2: Broken Authentication and Session Management</h4>
+                        <h4>A10: Underprotected APIs</h4>
                         <img src="images/owasp_top_10_2017.png" width="20%" height="20%">
                     </section>
                     <section>
-                        <h3>Stateful / Statelesss</h3>
+                        <h3>Authentifizierung (Stateful oder Stateless)</h3>
                         <table>
                             <thead>
                             <tr>
@@ -311,25 +323,22 @@
                         <img src="images/tweetable_oauth.png" width="90%" height="90%">
                     </section>
                     <section>
-                        <h1>Implicit</h1>
+                        <h1>Implicit Grant</h1>
                         <img src="images/angular2-logo.png" class="plain" width="20%">
                         <img src="images/jquery.png" class="plain" width="20%">
                     </section>
                     <section>
-                        <h1>Client Credentials</h1>
+                        <h1>Client Credentials Grant</h1>
                         <img src="images/backend_communication.png">
                     </section>
                     <section>
-                        <h1>Resource Owner</h1>
-                        <h2>Möglichst vermeiden!</h2>
+                        <h1>Resource Owner Grant</h1>
+                        <h2 class="fragment fade-up">Möglichst vermeiden!</h2>
                     </section>
                     <section>
                         <h1>Was darf ich?</h1>
-                        <ul>
-                            <li>A4: Broken Access Control</li>
-                            <li>A10: Underprotected APIs</li>
-                        </ul>
-                        </p>
+                        <h4>A4: Broken Access Control</h4>
+                        <h4>A10: Underprotected APIs</h4>
                         <img src="images/owasp_top_10_2017.png" width="20%" height="20%">
                     </section>
                     <section>
@@ -381,32 +390,36 @@
                     <section data-background="images/cloud.jpg" data-background-size="100%">
                         <h1>Und in der Cloud?</h1>
                     </section>
-                    <section tagcloud>
-                        <h3>Alte Bekannte auch in der Cloud</h3>
-                        CSRF
-                        XSS
-                        SQL Injection
-                        Session Fixation
-                        Denial of Service
-                        Vulnerable Dependencies
-                        Weak Passwords
-                        Broken Authorization
-                        Sensitive Data Exposure
+                    <section>
+                        <h2>Alte Bekannte ...und mehr...</h2>
+                        <span class="fragment highlight-current-red">CSRF</span>
+                        <span class="fragment highlight-current-red">XSS</span>
+                        <span class="fragment highlight-current-red">SQL Injection</span>
+                        <span class="fragment highlight-current-red">Session Fixation</span></br>
+                        <span class="fragment highlight-current-red">Vulnerable Dependencies</span>
+                        <span class="fragment highlight-current-red">Weak Passwords</span></br>
+                        <span class="fragment highlight-current-red">Broken Authorization</span>
+                        <span class="fragment highlight-current-red">Sensitive Data Exposure</span>
+                        <p class="fragment highlight-current-red grow">Distributed DoS</p>
+                    </section>
+                    <section data-background="images/azure_management_console.png" data-background-size="100%">
+                        <h1 style="color: #6a1520">Schwache Passwörter</h1>
                     </section>
                     <section>
-                        <h2>Schwache Passwörter</h2>
-                        <img src="images/azure_management_console.png">
+                        <h1>Was ist nun besser</h1>
+                        <h2>in der Cloud?</h2>
                     </section>
-                    <section>
-                        <img src="images/cloud-modelle.png">
+                    <section data-background="images/cloud-modelle.png" data-background-size="80%">
                     </section>
-                    <section>
-                        <h2>Rotate, Repair, Repave</h2>
-                        <blockquote cite="https://thenewstack.io/cloud-foundrys-approach-security-rotate-repair-repave">
-                            &ldquo;What if every server inside my data center had a maximum lifetime of two hours?
+                    <section data-background="images/africa.jpg">
+                        <h2 style="color: white">Rotate, Repair, Repave</h2>
+                        <h4 style="color: whitesmoke">Justin Smith</h4>
+                        <blockquote style="color: white" cite="https://thenewstack.io/cloud-foundrys-approach-security-rotate-repair-repave">
+                            &ldquo;What if every server inside
+                             my data center had a maximum lifetime
+                            of two hours?
                             This approach would frustrate malware writers...&rdquo;
                         </blockquote>
-                        Justin Smith, Pivotal
                     </section>
                 </section>
                 <section>
@@ -414,12 +427,8 @@
                         <h1>One more thing...</h1>
                     </section>
                     <section>
-                        <div class='left' style='float:left;width:40%'>
-                            <img src="images/owasp_top_10_2017.png" class="plain" width="100%" height="100%">
-                        </div>
-                        <div class='right' style='float:right;width:60%'>
-                            <h2>A7: Insufficient Attack Protection</h2>
-                        </div>
+                        <h3>A7: Insufficient Attack Protection</h3>
+                        <img src="images/owasp_top_10_2017.png" class="plain" width="40%" height="40%">
                     </section>
                     <section data-background="images/attacks.png" data-background-size="100%">
                     </section>
@@ -447,9 +456,9 @@
                 center: true,
                 slideNumber: 'c',
 
-                allottedTime: 5 * 60 * 1000, // 5 minutes
+                allottedTime: 50 * 60 * 1000, // 50 minutes
 
-                transition: 'none', // none/fade/slide/convex/concave/zoom
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
 				dependencies: [
                     { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
                     { src: 'plugin/markdown/marked.js' },
