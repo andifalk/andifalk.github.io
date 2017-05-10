@@ -40,20 +40,15 @@
                     <h3>9. Mai 2017</h3>
                 </section>
 				<section data-background="images/novatec-back.png">
-                    <div class='left' style='float:left;width:30%'>
-                        <img class="plain" src="images/profile.jpg" width="250px" height="300px" >
-                    </div>
-                    <div class='right' style='float:right;width:70%; color: white'>
-                        <h2 style="color: white">Andreas Falk</h2>
-                        <p>http://www.novatec-gmbh.de
-                        andreas.falk@novatec-gmbh.de</p>
-                        <p>Twitter: @andifalk</p>
-                    </div>
+                    <h3 style="color: white">Andreas Falk</h3>
+                    <p>http://www.novatec-gmbh.de</p>
+                    <p>andreas.falk@novatec-gmbh.de</p>
+                    <p>@NT_AQE, @andifalk</p>
+                    <img class="plain" src="images/portfolio.png" width="55%">
                 </section>
                 <section>
                     <section>
-                        <h1>Architektur</h1>
-                        <h1>Threat Model</h1>
+                        <h1>Architecture / Threat Model</h1>
                     </section>
                     <section data-background="images/threat_architecture.png" data-background-size="90%">
                         <aside class="notes">
@@ -155,12 +150,12 @@
                         </aside>
                     </section>
                     <section>
-                        <h1>Angular XSS Schutz</h1>
-                        <h3>Angular Template = <span style="color: green">Sicher</span></h3>
-                        <h3>Eingabewerte = <span style="color: red">Unsicher</span></h3>
+                        <h1>Angular XSS Protection</h1>
+                        <h3>Angular Template = <span style="color: green">Safe</span></h3>
+                        <h3>Input Values = <span style="color: red">Unsafe</span></h3>
                     </section>
                     <section>
-                        <h2>Angular Komponente</h2>
+                        <h2>Angular Component</h2>
                         <h4>Typescript</h4>
                         <pre><code class="typescript" data-trim contenteditable>
                             @Component({
@@ -180,21 +175,21 @@
                         <h2>Angular Template</h2>
                         <h4>HTML Bindings</h4>
                         <pre><code class="html" data-trim contenteditable>
-                            <h2>Binding potentiell gefährlicher HTML-Snippets</h2>
+                            <h2>Binding of potentially dangerous HTML-snippets</h2>
 
-                            <h3>Encoden von HTML Snippet</h3>
+                            <h3>Encoded HTML snippet</h3>
                             <h3 class="trusted">{{untrustedHtml}}</h3>
 
-                            <h3>Sanitizing von HTML Snippet (mit 'innerHtml')</h3>
+                            <h3>Sanitized HTML snippet</h3>
                             <h3 class="trusted" [innerHTML]="untrustedHtml"></h3>
                         </code></pre>
                     </section>
                     <section>
-                        <h2>Unsichere Angular API's</h2>
+                        <h2>Unsafe Angular API's</h2>
                         <img src="images/angular_bypass_security.png" width="40%" height="40%">
-                        <p><b>ElementRef:</b> Direkter Zugriff auf den DOM</p>
-                        <p><b>DomSanitizer:</b> Deaktivieren des XSS-Schutzes</p>
-                        <p class="fragment grow highlight-current-red">Möglichst nicht verwenden!</p>
+                        <p><b>ElementRef:</b> Direct access to DOM!</p>
+                        <p><b>DomSanitizer:</b> Deactivates XSS-Protection!</p>
+                        <p class="fragment grow highlight-current-red">Do NOT use!</p>
                         <small><a href="https://angular.io/docs/ts/latest">
                             https://angular.io/docs/ts/latest</a></small>
                     </section>
@@ -217,7 +212,7 @@
                     </section>
                     <section>
                         <h2>Spring MVC + Spring Data JPA</h2>
-                        <h4>Keine Injection mit Bean Validation</h4>
+                        <h4>Prevent Injections using Bean Validation</h4>
                         <pre><code class="java" data-trim contenteditable>
                             @Entity
                             public class Person extends AbstractPersistable&lt;Long&gt; {
@@ -235,7 +230,7 @@
                     </section>
                     <section>
                         <h2>Spring Data JPA</h2>
-                        <h4>Keine SQL-Injection mit Prepared Statements</h4>
+                        <h4>Prevent SQL-Injection using Prepared Statements</h4>
                         <pre><code class="java" data-trim contenteditable>
                             @Query(
                             "select u from User u where u.username = "
@@ -254,7 +249,19 @@
                         <img src="images/csrf.jpg">
                     </section>
                     <section>
-                        <h2>Spring Security CSRF Konfiguration</h2>
+                        <h1>Spring Security</h1>
+                        <h2>Secure By Default</h2>
+                        <ul>
+                            <li class="fragment">Authentication required for all HTTP endpoints</li>
+                            <li class="fragment">Session Fixation Protection</li>
+                            <li class="fragment">Session Cookie (HttpOnly, Secure)</li>
+                            <li class="fragment">CSRF Protection</li>
+                            <li class="fragment">Security Response Header</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Spring Security CSRF Configuration</h2>
+                        <h3>Angular Support</h3>
                         <pre><code class="java" data-trim contenteditable>
                             @Configuration
                             public class WebSecurityConfiguration
@@ -272,13 +279,13 @@
                         </code></pre>
                     </section>
                     <section>
-                        <h1>Wer bin ich?</h1>
+                        <h1>Who am I?</h1>
                         <h4>A2: Broken Authentication and Session Management</h4>
                         <h4>A10: Underprotected APIs</h4>
                         <img src="images/owasp_top_10_2017.png" width="20%" height="20%">
                     </section>
                     <section>
-                        <h3>Authentifizierung (Stateful oder Stateless)</h3>
+                        <h3>Authentication (Stateful or Stateless?)</h3>
                         <table>
                             <thead>
                             <tr>
@@ -288,20 +295,20 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Mit jedem Request</td>
-                                <td>Manuell als Header</td>
+                                <td>With each Request</td>
+                                <td>Manually as Header</td>
                             </tr>
                             <tr>
-                                <td>Gefahr von CSRF!</td>
-                                <td>Kein CSRF</td>
+                                <td>Potential CSRF!</td>
+                                <td>No CSRF possible</td>
                             </tr>
                             <tr>
-                                <td>Persistiert bei Unload von DOM</td>
-                                <td>Keine automatische Persistenz</td>
+                                <td>Persisted when unloading DOM</td>
+                                <td>No automatic persistence</td>
                             </tr>
                             <tr>
-                                <td>Nur eine Domain</td>
-                                <td>Domainübergreifend (CORS)</td>
+                                <td>One domain</td>
+                                <td>Cross domain (CORS)</td>
                             </tr>
                             <tr>
                                 <td>Sensitive Information (HTTPS)</td>
@@ -319,13 +326,36 @@
                         <img src="images/identityserver.jpg">
                     </section>
                     <section>
-                        <h2>OAuth 2 Server als Tweet</h2>
-                        <img src="images/tweetable_oauth.png" width="90%" height="90%">
+                        <h2>OAuth 2 / OpenId Connect Resource</h2>
+                        <pre><code class="java" data-trim >
+                            @EnableResourceServer
+                            @Configuration
+                            public class OAuth2Configuration {
+                                @Bean
+                                public JwtAccessTokenConverterConfigurer
+                                            jwtAccessTokenConverterConfigurer() {
+                                    return new MyJwtConfigurer(...);
+                                }
+                                static class MyJwtConfigurer
+                                        implements JwtAccessTokenConverterConfigurer {
+                                    @Override
+                                    public void configure(
+                                        JwtAccessTokenConverter converter) {...}
+                                }
+                            }
+                        </code></pre>
+                        <small>
+                            <a href="https://tools.ietf.org/html/rfc6819">OAuth 2.0 Threat Model and Security Considerations</a>
+                        </small>
                     </section>
                     <section>
                         <h1>Implicit Grant</h1>
                         <img src="images/angular2-logo.png" class="plain" width="20%">
-                        <img src="images/jquery.png" class="plain" width="20%">
+                        </p>
+                        <small>
+                            <a href="https://openid.net/specs/openid-connect-implicit-1_0.html">Implicit Client Implementer’s Guide</a><br>
+                            <a href="https://tools.ietf.org/html/rfc6819">OAuth 2.0 Threat Model and Security Considerations</a>
+                        </small>
                     </section>
                     <section>
                         <h1>Client Credentials Grant</h1>
@@ -333,17 +363,17 @@
                     </section>
                     <section>
                         <h1>Resource Owner Grant</h1>
-                        <h2 class="fragment fade-up">Möglichst vermeiden!</h2>
+                        <h2 style="color: red" class="fragment fade-up">Do NOT use!</h2>
                     </section>
                     <section>
-                        <h1>Was darf ich?</h1>
+                        <h1>What can I access?</h1>
                         <h4>A4: Broken Access Control</h4>
                         <h4>A10: Underprotected APIs</h4>
                         <img src="images/owasp_top_10_2017.png" width="20%" height="20%">
                     </section>
                     <section>
-                        <h2>Autorisierung der REST API</h2>
-                        <h3>Rollenbasiert</h3>
+                        <h2>Authorization of REST API</h2>
+                        <h3>Role based</h3>
                         <pre><code class="java" data-trim contenteditable>
                             public class UserBoundaryService {
 
@@ -354,8 +384,8 @@
 				    	</code></pre>
                     </section>
                     <section>
-                        <h2>Autorisierung der REST API</h2>
-                        <h3>Rechtebasiert</h3>
+                        <h2>Authorization of REST API</h2>
+                        <h3>Permission based</h3>
                         <pre><code class="java" data-trim contenteditable>
                             public class TaskBoundaryService {
 
@@ -366,8 +396,8 @@
 					    </code></pre>
                     </section>
                     <section>
-                        <h2>Autorisierung der REST API</h2>
-                        <h3>Integrationstest</h3>
+                        <h2>Authorization of REST API</h2>
+                        <h3>Integrationtest</h3>
                         <pre><code class="java" data-trim contenteditable>
                             public class AuthorizationIntegrationTest {
 
@@ -388,10 +418,10 @@
                 </section>
                 <section>
                     <section data-background="images/cloud.jpg" data-background-size="100%">
-                        <h1>Und in der Cloud?</h1>
+                        <h1>What about the Cloud?</h1>
                     </section>
                     <section>
-                        <h2>Alte Bekannte ...und mehr...</h2>
+                        <h2>Good old friends ...und more...</h2>
                         <span class="fragment highlight-current-red">CSRF</span>
                         <span class="fragment highlight-current-red">XSS</span>
                         <span class="fragment highlight-current-red">SQL Injection</span>
@@ -401,13 +431,14 @@
                         <span class="fragment highlight-current-red">Broken Authorization</span>
                         <span class="fragment highlight-current-red">Sensitive Data Exposure</span>
                         <p class="fragment highlight-current-red grow">Distributed DoS</p>
+                        <p class="fragment highlight-current-red grow">Economic DoS</p>
                     </section>
                     <section data-background="images/azure_management_console.png" data-background-size="100%">
-                        <h1 style="color: #6a1520">Schwache Passwörter</h1>
+                        <h1 style="color: #6a1520">Weak Passwords</h1>
                     </section>
                     <section>
-                        <h1>Was ist nun besser</h1>
-                        <h2>in der Cloud?</h2>
+                        <h2>So what has been changed</h2>
+                        <h1>in the Cloud?</h1>
                     </section>
                     <section data-background="images/cloud-modelle.png" data-background-size="80%">
                     </section>
@@ -420,6 +451,13 @@
                             of two hours?
                             This approach would frustrate malware writers...&rdquo;
                         </blockquote>
+                    </section>
+                    <section>
+                        <h2>What about application configuration and sensible data in the cloud?</h2>
+                    </section>
+                    <section data-background="images/springio.png" data-background-size="90%">
+                        <h3>Manage distributed configuration and secrets with Spring Cloud and Vault</h3>
+                        <p>Friday 19th May, 2017 6:00pm to 6:50pm</p>
                     </section>
                 </section>
                 <section>
@@ -456,7 +494,7 @@
                 center: true,
                 slideNumber: 'c',
 
-                allottedTime: 50 * 60 * 1000, // 50 minutes
+                allottedTime: 55 * 60 * 1000, // 55 minutes
 
                 transition: 'slide', // none/fade/slide/convex/concave/zoom
 				dependencies: [
