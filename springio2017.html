@@ -1,0 +1,538 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+		<title>Manage distributed configuration and secrets with Spring Cloud and Vault</title>
+        <meta name="description" content="Manage distributed configuration and secrets with Spring Cloud and Vault">
+        <meta name="author" content="Andreas Falk">
+
+        <link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/beige.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <link rel="stylesheet" href = "http://slidifylibraries2.googlecode.com/git/inst/libraries/widgets/bootstrap/css/bootstrap.css">
+
+
+        <!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+                <!-- Introduction -->
+                <section data-background="images/springio.png" data-background-size="90%">
+                    <h3>Manage distributed configuration and secrets with Spring Cloud and Vault</h3>
+                    <p>Andreas Falk</p>
+                    <p>Friday 19th May, 2017</p>
+                </section>
+                <section data-background="images/novatec-back.png">
+                    <h3 style="color: white">Andreas Falk</h3>
+                    <p>http://www.novatec-gmbh.de</p>
+                    <p>andreas.falk@novatec-gmbh.de</p>
+                    <p>@NT_AQE, @andifalk</p>
+                    <img class="plain" src="images/portfolio.png" width="55%">
+                </section>
+                <section data-background="images/evolution.png" data-background-size="75%">
+                    <h1>Agenda</h1>
+                </section>
+                <section data-background="images/cloud.jpg" data-background-size="100%">
+                    <img src="images/springproperties.png" class="plain">
+                </section>
+                <section>
+                    <h3>A6: Sensitive Data Exposure</h3>
+                    <img src="images/owasp_top_10_2017.png" class="plain" width="35%" height="35%">
+                    <p><small><a href="https://github.com/OWASP/Top10">https://github.com/OWASP/Top10</a></small></p>
+                </section>
+                <section data-background="images/key_heart.jpg" data-background-size="100%">
+                    <h2>Typical sensitive data</h2>
+                    <h3 style="color: black" class="fragment fade-up">Passwords</h3>
+                    <h3 style="color: black" class="fragment fade-up">Database credentials</h3>
+                    <h3 style="color: black" class="fragment fade-up">OAuth2 client secrets</h3>
+                    <h3 style="color: black" class="fragment fade-up">Encryption keys</h3>
+                    <h3 style="color: black" class="fragment fade-up">Sensitive user data</h3>
+                    <h3 style="color: black" class="fragment fade-up">Credit card numbers</h3>
+                </section>
+                <section>
+                    <h2>Application Properties</h2>
+                    <h4>Database access credentials</h4>
+                    <pre><code class="properties" data-trim>
+                        spring.datasource.url=jdbc:postgresql://localhost/test
+                        spring.datasource.username=root
+                        spring.datasource.password=mysupersecretpassword
+                    </code></pre>
+                </section>
+
+                <!-- Spring Cloud Config -->
+
+                <section>
+                    <section data-background="images/cloud.jpg">
+                        <h1>Spring Cloud Config</h1>
+                        <img src="images/spring-cloud.png" class="plain">
+                        <p>
+                        <small><a style="color: black" href="https://cloud.spring.io/spring-cloud-config">
+                            https://cloud.spring.io/spring-cloud-config</a></small>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config</h2>
+                        <small><a href="https://cloud.spring.io/spring-cloud-config">
+                            https://cloud.spring.io/spring-cloud-config</a></small>
+                        <p class="fragment">Externalized configuration in a distributed system</p>
+                        <p class="fragment">HTTP, resource-based API</p>
+                        <p class="fragment">Supports property file and YAML formats</p>
+                        <p class="fragment">Encrypt and decrypt property values</p>
+                        <aside class="notes">
+                            Spring Cloud Config
+                        </aside>
+                    </section>
+                    <section data-background="images/springcloudconfig.png" data-background-size="85%">
+                    </section>
+                    <section>
+                        <h2>Gradle Dependencies</h2>
+                        <pre><code class="groovy" data-trim>
+                            ext {
+                                springCloudVersion = 'Dalston.RELEASE'
+                            }
+
+                            dependencies {
+                                compile('org.springframework.cloud:
+                                            spring-cloud-config-server')
+                            }
+
+                            dependencyManagement {
+                                imports {
+                                    mavenBom "org.springframework.cloud:
+                                            spring-cloud-dependencies:${springCloudVersion}"
+                                }
+                            }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Just one additional annotation</h4>
+                        <pre><code class="java" data-trim>
+                            @EnableConfigServer
+                            @SpringBootApplication
+                            public class ConfigServerApplication {
+
+                                public static void main(String[] args) {
+                                    SpringApplication.run(
+                                        ConfigServerApplication.class, args);
+                                }
+                            }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Configuration</h4>
+                        <pre><code class="properties" data-trim>
+                            spring.cloud.config.server.git.uri=
+                                https://github.com/andifalk/cloud-config-repository
+                            server.port=8888
+                            security.basic.enabled=true
+                            security.user.name=admin
+                            security.user.password=secret
+                        </code></pre>
+                    </section>
+                </section>
+
+                <!-- Spring Cloud Config Server with encryption -->
+
+                <section>
+                    <section data-background="images/cloud.jpg">
+                        <h1>Spring Cloud Config</h1>
+                        <h2>Encryption and Decryption</h2>
+                        <img src="images/secure_spring_cloud.png" class="plain">
+                        <p>
+                            <small><a style="color: black" href="https://cloud.spring.io/spring-cloud-config">
+                                https://cloud.spring.io/spring-cloud-static/Dalston.RELEASE/#_security</a></small>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Symmetric Key Configuration</h4>
+                        <pre><code class="properties" data-trim>
+                            encrypt.key=MyVerySecureEncryptionKey
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Asymmetric Key Configuration</h4>
+                        <pre><code class="properties" data-trim>
+                            encrypt.key-store.location=classpath:configserver.jks
+                            encrypt.key-store.alias=configserver
+                            encrypt.key-store.password=secret
+                            encrypt.key-store.secret=secret
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Encrypting data</h4>
+                        <pre><code class="bash" data-trim>
+                            $ curl -u admin:secret -d test http://localhost:8888/encrypt
+
+                            AQAx/RH8tiJj9V43l4dwAxhh0bXGPYa2UjRGOM8s5z2EmCXWRU5DLPzxGptF08nEo
+                            kE+BfZPm4A3vco3volhWdYQcCAFguX+6LOvoxewv5AyfkIt1E0bTc7sa4wSSeBGG4
+                            SZ1K/nkto4e6jH+5tktLiPpXoABzvy3YsAgXZ6j5zUM320cWEd4QBSoB0mYP5Kfsq
+                            EFbFEUBm2wMyUSFB4/NXn5apn8KZ2c2WTAj/jZlrg/jI4Sz094zDzRaM+iZuqHjaU
+                            xVng+3dTsz9DQ9rhfWFllmrtUyoKwgNWLuegV6neDsHGdz7F1bucvJ2CzEZb3tp76
+                            K2RrP0m9KPesTZMtbUH2/g9uUDORh/95P1s+dRt0QznwlXshtnb8Hu3i7GdkmA=
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Decrypting data</h4>
+                        <pre><code class="bash" data-trim>
+                            $ curl localhost:8888/decrypt -u admin:secret -d AQAx/RH8tiJj9V43l4
+                            dwAxhh0bXGPYa2UjRGOM8s5z2EmCXWRU5DLPzxGptF08nEokE+BfZPm4A3vco3vol
+                            hWdYQcCAFguX+6LOvoxewv5AyfkIt1E0bTc7sa4wSSeBGG4SZ1K/nkto4e6jH+5tk
+                            tLiPpXoABzvy3YsAgXZ6j5zUM320cWEd4QBSoB0mYP5KfsqEFbFEUBm2wMyUSFB4/
+                            NXn5apn8KZ2c2WTAj/jZlrg/jI4Sz094zDzRaM+iZuqHjaUxVng+3dTsz9DQ9rhfW
+                            FllmrtUyoKwgNWLuegV6neDsHGdz7F1bucvJ2CzEZb3tp76K2RrP0m9KPesTZMtbU
+                            H2/g9uUDORh/95P1s+dRt0QznwlXshtnb8Hu3i7GdkmA=
+
+                            test
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Server</h2>
+                        <h4>Encrypted sensitive property values</h4>
+                        <pre><code class="bash" data-trim>
+                            secretkey={cipher}AQBcFzU3gDVVdj0P2uX/60LzeFqQi8Bo2sCTOiiMSe+w
+                                Yq4f0smM8HES0TKesr8Nms+EqgV5t9Rld7PGALjVUAAfHjAf6WS1yYz3K+
+                                NvXrgu8umjOyRDxfKBh5OH2jvYX+EiKv/JgwDeUg3TXnTnsheh3Mim0dSu
+                                fkojbBlWxO8HsfW5z1qG9tLSlHnWvtcpIGLdRAUwfcKw+/1SViuYxwi/p9
+                                H+J/SOomr4hjjnCuaFITa0zfQc4XTLOrGxW64dhghDvCgu3BxMe0TRaBci
+                                Ugkqka4zgBmzge0kw7r82b84GELmDGpjDp7HRUB+cVHqzZXuQzQB9vCjq1
+                                xI19e6ZQm62DkOxaqtafGxqw+VmyFl1+XYEs1k2lWkiUMVyJyiixI=
+                        </code></pre>
+                    </section>
+                    <section data-background="images/demo.jpg" data-background-size="100%">
+                        <h1>Demo</h1>
+                    </section>
+                </section>
+
+                <!-- Vault -->
+
+                <section>
+                    <section data-background="images/safe.jpg" data-background-size="100%">
+                        <h1 style="color: white">Vault</h1>
+                    </section>
+                    <section data-background="images/babuschka.jpg">
+                        <h1 style="color: white">Key Management</h1>
+                    </section>
+                    <section>
+                        <small><a style="color: black" href="https://www.vaultproject.io/">
+                            https://www.vaultproject.io/</a></small><br>
+                        <img src="images/hashicorp_vault.png" class="plain">
+                        <h3 class="fragment">Secret Storage</h3>
+                        <h3 class="fragment">Key Revocation</h3>
+                        <h3 class="fragment">Key Rolling</h3>
+                        <h3 class="fragment">Audit Logs</h3>
+                    </section>
+                    <section data-background="images/vault_architecture.png" data-background-size="99%">
+                    </section>
+                    <section>
+                        <h1>Secret Storage</h1>
+                        <h3 class="fragment">Encryption (AES cypher)</h3>
+                        <h3 class="fragment">Dynamic Secrets</h3>
+                        <h3 class="fragment">Access control policies</h3>
+                        <h3 class="fragment">Lease time (automatic revocation)</h3>
+                        <aside class="notes">
+                            Advanced Encryption Standard
+
+                        </aside>
+                    </section>
+                    <section>
+                        <h1>Audit Logs</h1>
+                        <h3 class="fragment">Not active by default</h3>
+                        <h3 class="fragment">Sensitive data hashed (HMAC-SHA256)</h3>
+                        <h3 class="fragment">Targets: File, Syslog, Socket</h3>
+                        <pre><code class="text" data-trim>
+                            ...
+                            ,"path":"secret/hello","data":null,"remote_address":"127.0.0.1"
+                            ,"wrap_ttl":0,"headers":{}},"response":{"secret":{"lease_id":""}
+                            ,"data":{"value":"hmac-sha256:213d0d2572fe27ffd0cd2d97cf009c2d0
+                                2e97b5af3f81b9af41f593982ffae8c"}},"error":""}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h1>Authentication</h1>
+                        <h3 class="fragment">Token (default)</h3>
+                        <h3 class="fragment">AppId</h3>
+                        <h3 class="fragment">AppRole</h3>
+                        <h3 class="fragment">TLS client certificate</h3>
+                        <h3 class="fragment">AWS, GitHub, ...</h3>
+                    </section>
+                    <section>
+                        <h1>Rotate, Repair, Repave</h1>
+                        <h4>Justin Smith (Pivotal)</h4>
+                    </section>
+                    <section>
+                        <h1>Secret Backends</h1>
+                        <h3>Getting dynamic credentials (with lease time)</h3>
+                        <h4 class="fragment">AWS</h4>
+                        <h4 class="fragment">Consul</h4>
+                        <h4 class="fragment">MongoDB</h4>
+                        <h4 class="fragment">Databases (MySQL, PostgreSQL, Cassandra)</h4>
+                        <h4 class="fragment">RabbitMQ, and many more...</h4>
+                    </section>
+                    <section data-background="images/vault_states.png" data-background-size="98%">
+                    </section>
+                    <section>
+                        <h2>Start vault server</h2>
+                        <pre><code class="shell" data-trim>
+                            $ vault server -config=./memory.conf
+                        </code></pre>
+                        <p>memory.conf</p>
+                        <pre><code class="json" data-trim>
+                            storage "inmem" {
+                            }
+                            listener "tcp" {
+                                address     = "127.0.0.1:8200"
+                                tls_disable = 1
+                            }
+                            disable_mlock = true
+                        </code></pre>
+                        <aside class="notes">
+                            disable_mlock (bool: false) –
+                            Disables the server from executing the mlock syscall.
+                            mlock prevents memory from being swapped to disk.
+                            Vault only supports memory locking on UNIX-like systems that
+                            support the mlock() syscall (Linux, FreeBSD, etc).
+                        </aside>
+                    </section>
+                    <section data-background="images/key_shares.png" data-background-size="100%">
+                        <aside class="notes">
+                            Vault uses a technique known as Shamir's secret sharing algorithm to split
+                            the master key into 5 shares, any 3 of which are required to reconstruct the master key.
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Initialize vault server</h2>
+                        <pre><code class="shell" data-trim>
+                            $ vault init -key-shares=5 -key-threshold=2
+
+                            Unseal Key 1: v236b4yJQDnaJ3EmkOhycZTcxTJfMbNeILqxWfRpzGn0
+                            Unseal Key 2: g1tV/d4vp7VVbOu93aHrHZt41xE5YtX7yYBsFMIXGHCf
+                            Unseal Key 3: rAI5FwrVF8XFUD7BOtTer9bL4A39HxHhnXQo85uSyphf
+                            Unseal Key 4: kDSWhVhz8ElKG6Rad51Hw9lv8i6bTHdEdE71vq3sHoE0
+                            Unseal Key 5: 4KUY7CS+UBi5lxlwpCRY+sWXdPFDp68rX2F6bTxT0nHF
+                            Initial Root Token: 68a80410-e315-fc39-d1ad-9864e169a47f
+
+                            Please securely distribute the above keys. When the vault is
+                            re-sealed, restarted, or stopped, you must provide at least 2
+                            of these keys to unseal it again.
+
+                            Vault does not store the master key. Without at least 2 keys,
+                            your vault will remain permanently sealed.
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Unseal vault server</h2>
+                        <pre><code class="shell" data-trim>
+                            $ vault unseal v236b4yJQDnaJ3EmkOhycZTcxTJfMbNeILqxWfRpzGn0
+
+                            Sealed: true
+                            Key Shares: 5
+                            Key Threshold: 2
+                            Unseal Progress: 1
+                            Unseal Nonce: 3a7f80b8-9aa4-2338-8a0a-0295331962d7
+
+                            $ vault unseal rAI5FwrVF8XFUD7BOtTer9bL4A39HxHhnXQo85uSyphf
+                            Sealed: false
+                            Key Shares: 5
+                            Key Threshold: 2
+                            Unseal Progress: 0
+                            Unseal Nonce:
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Authenticate with vault server</h2>
+                        <pre><code class="shell" data-trim>
+                            $ vault auth 68a80410-e315-fc39-d1ad-9864e169a47f
+
+                            Successfully authenticated! You are now logged in.
+                            token: 68a80410-e315-fc39-d1ad-9864e169a47f
+                            token_duration: 0
+                            token_policies: [root]
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Write and read secrets</h2>
+                        <pre><code class="shell" data-trim>
+                            $ vault write secret/mysecret hello=world
+
+                            Success! Data written to: secret/mysecret
+
+                            $ vault read secret/mysecret
+
+                            Key             	Value
+                            ---             	-----
+                            refresh_interval	768h0m0s
+                            hello           	world
+                        </code></pre>
+                    </section>
+                    <section data-background="images/demo.jpg" data-background-size="100%">
+                        <h1>Demo</h1>
+                    </section>
+                </section>
+
+                <!-- Spring Cloud Vault Config -->
+                <section>
+                    <section data-background="images/cloud.jpg">
+                        <h1>Spring Cloud Vault</h1>
+                        <img src="images/spring_cloud_vault.png" class="plain">
+                        <p>
+                            <small><a style="color: black" href="https://cloud.spring.io/spring-cloud-vault">
+                                https://cloud.spring.io/spring-cloud-vault</a></small>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Gradle Dependencies</h2>
+                        <pre><code class="groovy" data-trim>
+                            ext {
+                                springCloudVersion = 'Dalston.RELEASE'
+                            }
+
+                            dependencies {
+                                compile('org.springframework.cloud:
+                                            spring-cloud-starter-vault-config')
+                            }
+
+                            dependencyManagement {
+                                imports {
+                                    mavenBom "org.springframework.cloud:
+                                            spring-cloud-dependencies:${springCloudVersion}"
+                                }
+                            }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h1>Secret data mapping</h1>
+                        <h4>bootstrap.properties</h4>
+                        <pre><code class="properties" data-trim>
+                            spring.cloud.vault.generic.application-name =
+                                    application1,additional/keys
+                            #spring.cloud.vault.application-name = ...
+                            #spring.application.name = ...
+                        </code></pre>
+                        <h4>Mapped secret paths in vault</h4>
+                        <pre><code class="uri" data-trim>
+                            /secret/application1
+                            /secret/application1/myprofile
+                            /secret/additional/keys
+                            /secret/application
+                            /secret/application/myprofile
+                        </code></pre>
+                    </section>
+                    <section data-background="images/demo.jpg" data-background-size="100%">
+                        <h1>Demo</h1>
+                    </section>
+                    <section>
+                        <h2>Rotate Database Credentials</h2>
+                        <h4>bootstrap.yml</h4>
+                        <pre><code class="yaml" data-trim>
+                            spring.cloud.vault:
+                                postgresql:
+                                    enabled: true
+                                    role: readonly
+                                    backend: postgresql
+                                    username-property: spring.datasource.username
+                                    password-property: spring.datasource.username
+                        </code></pre>
+                    </section>
+                    <section data-background="images/springcloudconfig_vault.png" data-background-size="85%">
+                    </section>
+                    <section>
+                        <h2>Spring Cloud Config Vault Environment Repository</h2>
+                        <h4>application.properties (Config Server)</h4>
+                        <pre><code class="properties" data-trim>
+                            spring.profiles.active=vault
+                            spring.cloud.config.server.vault.host=127.0.0.1
+                            spring.cloud.config.server.vault.port=8200
+                            spring.cloud.config.server.vault.scheme=https
+                        </code></pre>
+                        <h4>bootstrap.properties (Client)</h4>
+                        <pre><code class="properties" data-trim>
+                            spring.cloud.config.token = YourVaultToken
+                        </code></pre>
+                    </section>
+                </section>
+
+                <!-- The end -->
+                <section data-background="images/target.jpg" data-background-size="100%">
+                    <h1 style="color: red">Target Achieved?</h1>
+                </section>
+                <section>
+                    <h1>References</h1>
+                    <small>
+                    <ul>
+                        <li><a href="https://cloud.spring.io/spring-cloud-config/">Spring Cloud Config (https://cloud.spring.io/spring-cloud-config/)</a></li>
+                        <li><a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-config/1.3.0.RELEASE/#_security">Spring Cloud Config Security (http://cloud.spring.io/spring-cloud-static/spring-cloud-config/1.3.0.RELEASE/#_security)</a></li>
+                        <li><a href="https://en.wikipedia.org/wiki/Shamir's_Secret_Sharing">Shamir's secret sharing algorithm (https://en.wikipedia.org/wiki/Shamir's_Secret_Sharing)</a></li>
+                        <li><a href="https://cloud.spring.io/spring-cloud-vault">Spring Cloud Vault (https://cloud.spring.io/spring-cloud-vault)</a></li>
+                        <li><a href="https://www.vaultproject.io">Vault (https://www.vaultproject.io)</a></li>
+                        <li><a href="https://www.hashicorp.com/blog/cloud-foundry-vault-service-broker">Cloud Foundry Vault Service Broker (https://www.hashicorp.com/blog/cloud-foundry-vault-service-broker)</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=MvPIthr4kXA&t=1601s">Cloud Native Key Management — Justin Smith (https://www.youtube.com/watch?v=MvPIthr4kXA&t=1601s)</a></li>
+                        <li><a href="https://github.com/andifalk/distributed-secure-configuration">Sources and Presentation (https://github.com/andifalk/distributed-secure-configuration)</a></li>
+                    </ul>
+                        <p>All images used are from <a href="https://pixabay.com/">Pixabay</a> and are published under <a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">Creative Commons CC0 license.</a></p>
+                        All used logos are trademarks of corresponding companies
+                    </small>
+                </section>
+                <section data-background="images/key.jpg">
+                    <h1>Q&A</h1>
+                    <p>http://www.novatec-gmbh.de</br>
+                    http://blog.novatec-gmbh.de</p>
+                    <p>andreas.falk@novatec-gmbh.de</p>
+                    <img src="images/twitter.png" width="50px" class="plain">
+                    <p>@NT_AQE, @andifalk</p>
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+
+		<script>
+			Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                pdfMaxPagesPerSlide: 1,
+                allottedTime: 45 * 60 * 1000, // 45 minutes
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+				dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/print-pdf/print-pdf.js' },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/tagcloud/tagcloud.js', async: true },
+                    { src: 'plugin/elapsed-time-bar/elapsed-time-bar.js'},
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() {
+					    hljs.initHighlightingOnLoad(); }
+					}
+				]
+			});
+            Reveal.configure({ slideNumber: 'c/t' });
+		</script>
+	</body>
+</html>
